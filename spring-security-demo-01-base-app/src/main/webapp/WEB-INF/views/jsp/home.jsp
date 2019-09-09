@@ -16,17 +16,27 @@
 	<hr />
 	<p>Welcome to Demo Company home page</p>
 	<hr />
+	
 	<p>
 		User:
 		<security:authentication property="principal.username" />
 		<br> <br> Roles:
 		<security:authentication property="principal.authorities" />
 	</p>
+	
 	<hr />
+	
+	<security:authorize access="hasRole('MANAGER')">
 	<p>
 		<a href="${ pageContext.request.contextPath }/leaders">Leadership
 			Meeting</a>
 	</p>
+	</security:authorize>
+	<security:authorize access="hasRole('ADMIN')">
+	<p>
+        <a href="${ pageContext.request.contextPath }/systems">Admin Board</a>
+    </p>
+    </security:authorize>
 	<hr />
 	<form:form action="${ pageContext.request.contextPath }/logout"
 		method="POST">
