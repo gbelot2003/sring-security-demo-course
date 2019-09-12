@@ -1,5 +1,8 @@
 package com.gbelot.demo;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,17 +14,17 @@ import org.springframework.security.core.userdetails.User.UserBuilder;
 @Configuration
 @EnableWebSecurity
 public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	// Add a reference to our security data source
+	@Autowired
+	private DataSource securityDataSource;
+	
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
-		UserBuilder users = User.withDefaultPasswordEncoder();
-		
-		auth.inMemoryAuthentication()
-			.withUser(users.username("andrea").password("Luna0102").roles("EMPLOYEE"))
-			.withUser(users.username("gerar").password("Luna0102").roles("EMPLOYEE", "ADMIN"))
-			.withUser(users.username("samu").password("Luna0102").roles("EMPLOYEE", "MANAGER"))
-			.withUser(users.username("nely").password("Luna0102").roles("EMPLOYEE", "ADMIN"));
+		// use jdbc authentication
+		auth.jdbcAuthentication().dataSource(securityDataSource);
 	}
 
 	@Override
